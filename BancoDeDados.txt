@@ -1,0 +1,125 @@
+CREATE TABLE departamento (
+codDepartamento INTEGER PRIMARY KEY AUTO_INCREMENT UNIQUE NOT NULL,
+nome VARCHAR(40) UNIQUE NOT NULL,
+descricaoFuncional VARCHAR(80),
+localizacao TEXT
+);
+
+CREATE TABLE estado(
+siglaEstado CHAR(2) NOT NULL,
+nome VARCHAR(30) NOT NULL  
+);
+
+CREATE TABLE cidade(
+codCidade INTEGER PRIMARY KEY AUTO_INCREMENT UNIQUE NOT NULL,
+nome VARCHAR(50) NOT NULL,
+siglaEstado CHAR(2) NOT NULL    
+);
+
+CREATE TABLE vendedor (
+codVendedor INTEGER PRIMARY KEY AUTO_INCREMENT UNIQUE NOT NULL,    
+nome VARCHAR(60) NOT NULL,    
+dataNascimento DATETIME,
+endereco VARCHAR(60) NOT NULL,
+cep CHAR(8) NOT NULL,
+telefone VARCHAR(20) NOT NULL,
+codCidade INT,
+dataContratacao DATETIME,
+codDepartamento INT,
+FOREIGN KEY (codCidade) REFERENCES cidade(codCidade),
+FOREIGN KEY (codDepartamento) REFERENCES departamento(codDepartamento)
+);    
+
+CREATE TABLE cliente(
+codCliente INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,    
+endereco VARCHAR(60) NOT NULL,
+codCidade INT,
+telefone VARCHAR(20) NOT NULL,
+tipo CHAR(1) CHECK(tipo('F','J')),
+dataCadastro DATETIME,
+cep CHAR(8)
+);    
+
+CREATE TABLE clienteFisico(
+codCliente INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nome VARCHAR(50) NOT NULL,
+dataNascimento DATE,
+cpf VARCHAR(11),
+rg VARCHAR(8)    
+);
+
+CREATE TABLE clienteJuridico(
+codCliente INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nomeFantasia VARCHAR(80) NOT NULL,
+razaoSocial VARCHAR(80) NOT NULL,
+ie VARCHAR(20) NOT NULL,
+cgc VARCHAR(20) NOT NULL
+ );
+ 
+ CREATE TABLE classe(
+codClasse INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+sigla VARCHAR(12) NOT NULL,
+descricao VARCHAR(80) NOT NULL, 
+nome VARCHAR(40)NOT NULL
+);
+
+CREATE TABLE produto(
+codProduto INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,    
+descrição VARCHAR(40) NOT NULL,
+unidadeMedida CHAR(2) NOT NULL,
+embalagem VARCHAR(15) DEFAULT ('fardo'),
+codClasse INT,
+precoVenda NUMERIC(14,2),
+estoqueMinimo NUMERIC (14,2)
+);
+
+CREATE TABLE produtoLote(
+codProduto INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+numeroLote INT,
+quantidadeAdquirida NUMERIC(14,2),
+quantidadeVendida NUMERIC(14,2),	
+precoCusto NUMERIC(14,2),
+dataValidade DATE
+);
+
+CREATE TABLE venda(
+codVenda INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+codCliente INT,
+codVendedor INT,
+dataVenda DATETIME,
+enderecoEntrega VARCHAR(60) NOT NULL,
+status VARCHAR (30) NOT NULL
+);
+
+CREATE TABLE itemVenda(
+codVenda INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+codProduto INT,   
+numeroLote INT,
+quantidade NUMERIC(14,2) CHECK(quantidade >= 0)   
+);
+
+CREATE TABLE fornecedor(
+codFornecedor INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nomeFantasia VARCHAR(80) NOT NULL,
+razaoSocial VARCHAR(80) NOT NULL,
+ie VARCHAR(20) NOT NULL,
+cgc VARCHAR(20) NOT NULL,
+endereco VARCHAR(60) NOT NULL,
+telefone VARCHAR(20) NOT NULL,    
+codCidade INT
+);
+
+CREATE TABLE pedido(
+codPedido INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+dataRealizacao DATETIME,
+dataEntrega DATE,
+codFornecedor INT,
+valor NUMERIC(20,2)
+);
+
+CREATE TABLE itemPedido(
+codPedido INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+codProduto INT,
+quantidade NUMERIC(14,2) CHECK(quantidade >= 0) NOT NULL
+);
+
