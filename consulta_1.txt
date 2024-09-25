@@ -1,0 +1,7 @@
+1) SELECT * FROM `produto` WHERE 1
+2) SELECT codFornecedor, nomeFantasia, telefone, codCidade, endereco FROM fornecedor;
+3) SELECT codVenda, dataVenda FROM venda WHERE 'Despachada';
+4) SELECT * FROM clienteJuridico;
+5) SELECT * FROM `produtoLote` WHERE dataValidade < '2024-08-25';
+6) SELECT nome FROM departamento;
+
