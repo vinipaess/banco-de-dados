@@ -27,3 +27,68 @@ CREATE TABLE cliente (
 	dataCadastro date default (current_date),
 	cep char(8),
 	CONSTRAINT fk_cli_cid FOREIGN KEY (codCidade) REFERENCES cidade (codCidade) ON DELETE no action ON UPDATE cascade);
+
+
+
+DROP TABLE IF EXISTS clienteFisico;
+CREATE TABLE clienteFisico (
+    codCliente BIGINT UNSIGNED PRIMARY KEY, 
+    nome VARCHAR(50) NOT NULL, 
+    dataNascimento DATE, 
+    cpf VARCHAR(11) NOT NULL, 
+    rg VARCHAR(8),  
+    CONSTRAINT fk_clienteFisico_cliente FOREIGN KEY (codCliente) 
+        REFERENCES cliente(codCliente) 
+        ON DELETE RESTRICT 
+        ON UPDATE CASCADE,
+    CONSTRAINT uq_clienteFisico_cpf UNIQUE (cpf)
+);
+
+CREATE TABLE clienteJuridico (
+codCliente BIGINT UNSIGNED PRIMARY KEY, 
+nomeFantasia VARCHAR(80),  
+razaoSocial VARCHAR(80) NOT NULL,  
+ie VARCHAR(20) NOT NULL, 
+cgc VARCHAR(20) NOT NULL, 
+CONSTRAINT fk_clienteJuridico_cliente FOREIGN KEY (codCliente) 
+REFERENCES cliente(codCliente) 
+ON DELETE RESTRICT    
+ON UPDATE CASCADE,      
+CONSTRAINT uq_clienteJuridico_nomeFantasia UNIQUE (nomeFantasia),   
+CONSTRAINT uq_clienteJuridico_razaoSocial UNIQUE (razaoSocial),    
+CONSTRAINT uq_clienteJuridico_ie UNIQUE (ie),    
+CONSTRAINT uq_clienteJuridico_cgc UNIQUE (cgc)  
+);
+
+CREATE TABLE produto(
+codProduto INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,    
+descrição VARCHAR(40) NOT NULL,
+unidadeMedida CHAR(2) NOT NULL,
+embalagem VARCHAR(15) DEFAULT ('fardo'),
+codClasse INT,
+precoVenda NUMERIC(14,2),
+estoqueMinimo NUMERIC (14,2),
+CONSTRAINT fk_produto_classe FOREIGN KEY (codClasse) REFERENCES classe(codClasse) ON DELETE SET NULL ON UPDATE SET NULL
+);
+
+CREATE TABLE produtoLote(
+codProduto INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+numeroLote INT,
+quantidadeAdquirida NUMERIC(14,2),
+quantidadeVendida NUMERIC(14,2),	
+precoCusto NUMERIC(14,2),
+dataValidade DATE,
+CONSTRAINT fk_produtoLote_produto FOREIGN KEY (codProduto) REFERENCES produto(codProduto) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE venda(
+codVenda INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+codCliente BIGINT unsigned,
+codVendedor BIGINT unsigned,
+dataVenda DATETIME,
+enderecoEntrega VARCHAR(60) NOT NULL,
+status VARCHAR (30) NOT NULL,
+CONSTRAINT fk_venda_cliente FOREIGN KEY (codCliente) REFERENCES cliente(codCliente) ON DELETE NO ACTION ON UPDATE CASCADE,
+CONSTRAINT fk_venda_vendedor FOREIGN KEY (codVendedor) REFERENCES vendedor(codVendedor) ON DELETE SET DEFAULT ON UPDATE CASCADE
+);
+
