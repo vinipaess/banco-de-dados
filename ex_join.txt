@@ -1,0 +1,19 @@
+1) SELECT pedido.codPedido, pedido.dataRealizacao, pedido.dataEntrega, fornecedor.nomeFantasia FROM pedido
+INNER JOIN fornecedor
+ON pedido.codPedido = fornecedor.codFornecedor
+
+2) SELECT vendedor.nome, vendedor.dataNascimento, cidade.nome FROM vendedor
+INNER JOIN cidade
+ON vendedor.codCidade = cidade.codCidade
+WHERE cidade.nome = 'Apucarana'
+
+3) SELECT venda.codVenda, venda.dataVenda, vendedor.nome, produtoLote.numeroLote, produto.descricao FROM venda  
+INNER JOIN vendedor
+ON venda.codVenda =  vendedor.codVendedor
+INNER JOIN produtoLote
+ON vendedor.codVendedor = produtoLote.codProduto
+INNER JOIN produto
+ON vendedor.codVendedor = produto.codProduto
+WHERE produto.descricao = 'Cal'
+
+4)
