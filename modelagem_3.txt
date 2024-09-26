@@ -92,3 +92,53 @@ CONSTRAINT fk_venda_cliente FOREIGN KEY (codCliente) REFERENCES cliente(codClien
 CONSTRAINT fk_venda_vendedor FOREIGN KEY (codVendedor) REFERENCES vendedor(codVendedor) ON DELETE SET DEFAULT ON UPDATE CASCADE
 );
 
+CREATE TABLE itemVenda(
+codVenda INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+codProduto BIGINT UNSIGNED,   
+numeroLote BIGINT UNSIGNED,
+quantidade NUMERIC(14,2) CHECK(quantidade >= 0),
+CONSTRAINT fk_itemVenda_venda FOREIGN KEY(codVenda) REFERENCES venda(codVenda) ON DELETE CASCADE ON UPDATE CASCADE
+);    
+ 
+CREATE TABLE fornecedor(
+codFornecedor INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nomeFantasia VARCHAR(80) NOT NULL,
+razaoSocial VARCHAR(80) NOT NULL,
+ie VARCHAR(20) NOT NULL,
+cgc VARCHAR(20) NOT NULL,
+endereco VARCHAR(60) NOT NULL,
+telefone VARCHAR(20) NOT NULL,    
+codCidade BIGINT UNSIGNED,
+CONSTRAINT fk_fornecedor_cidade FOREIGN KEY(codCidade) REFERENCES cidade(codCidade) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE pedido(
+codPedido INTEGER PRIMARY KEY AUTO_INCREMENT,
+dataRealizacao DATETIME,
+dataEntrega DATE,
+codFornecedor INT,
+valor NUMERIC(20,2),
+CONSTRAINT fk_pedido_fornecedor FOREIGN KEY(codFornecedor) REFERENCES fornecedor(codFornecedor) ON DELETE CASCADE ON UPDATE CASCADE
+);	
+
+CREATE TABLE itemPedido(
+codPedido INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+codProduto BIGINT unsigned,
+quantidade NUMERIC(14,2) CHECK(quantidade >= 0) NOT NULL,
+CONSTRAINT fk_itemPedido_pedido FOREIGN KEY (codPedido) REFERENCES pedido(codPedido) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE contasReceber(
+codTitulo INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+dataVencimento DATE NOT NULL,    
+codVenda INT NOT NULL,
+parcela INT,
+valor VARCHAR(20) NOT NULL,
+dataPagamento DATE,
+localPagamento VARCHAR(80) NOT NULL,
+juros NUMERIC(12,2),
+correcaoMonetaria  NUMERIC(12,2),
+FOREIGN KEY (codVenda) REFERENCES venda(codVenda),
+CONSTRAINT fk_contasReceber_venda FOREIGN KEY (codVenda) REFERENCES venda(codVenda) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
