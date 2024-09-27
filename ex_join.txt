@@ -16,4 +16,24 @@ INNER JOIN produto
 ON vendedor.codVendedor = produto.codProduto
 WHERE produto.descricao = 'Cal'
 
-4)
+4) SELECT classe.sigla, classe.nome, produto.codProduto, produto.descricao, produto.estoqueMinimo FROM classe
+INNER JOIN produto
+ON classe.codClasse = produto.codClasse
+WHERE classe.nome = 'Acabamentos'
+
+5) SELECT fornecedor.nomeFantasia, pedido.codPedido, pedido.dataRealizacao, pedido.dataEntrega FROM fornecedor
+INNER JOIN pedido
+ON fornecedor.codFornecedor = pedido.codFornecedor
+WHERE fornecedor.razaoSocial =  'Incepa'
+
+6) SELECT produto.codProduto, produto.descricao, venda.codVenda FROM produto
+LEFT JOIN venda
+ON produto.codProduto =  venda.codVenda
+
+7) SELECT fornecedor.nomeFantasia, pedido.codPedido, pedido.dataEntrega FROM fornecedor
+LEFT JOIN pedido
+ON fornecedor.codFornecedor = pedido.codFornecedor
+
+8) SELECT departamento.nome, departamento.localizacao, vendedor.nome, vendedor.dataNascimento FROM departamento
+RIGHT JOIN vendedor
+ON departamento.codDepartamento = vendedor.codDepartamento
